@@ -6,6 +6,8 @@ Resources:
     Properties:
       Runtime: nodejs22.x
       Handler: src/handlers/health.handler
+      Architectures:
+      - arm64
       Events:
         HealthApi:
           Type: Api
@@ -15,3 +17,48 @@ Resources:
       CodeUri: HealthFunction
     Metadata:
       SamResourceId: HealthFunction
+  CreateNGOFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs22.x
+      Handler: src/handlers/ngos.handler
+      Architectures:
+      - arm64
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName: disaster-response-ngos
+      Events:
+        CreateNGOApi:
+          Type: Api
+          Properties:
+            Path: /ngos
+            Method: post
+      CodeUri: CreateNGOFunction
+    Metadata:
+      SamResourceId: CreateNGOFunction
+  GetNGOsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs22.x
+      Handler: src/handlers/getNgos.handler
+      Architectures:
+      - arm64
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName: disaster-response-ngos
+      Events:
+        GetNGOsApi:
+          Type: Api
+          Properties:
+            Path: /ngos
+            Method: get
+      CodeUri: GetNGOsFunction
+    Metadata:
+      SamResourceId: GetNGOsFunction
+  NGOTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: disaster-response-ngos
+      PrimaryKey:
+        Name: id
+        Type: String
