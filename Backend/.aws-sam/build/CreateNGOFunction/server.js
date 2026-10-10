@@ -16,7 +16,7 @@ const getPartnerNGOs = tool({
         return "NGO data is unavailable. Do not invent NGO details.";
       }
 
-      return JSON.stringify(data);
+      return JSON.stringify(data); 
     } catch {
       return "NGO API could not be reached.";
     }
